@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+    api_v1:
+        build:
+            context: ./pipelines
+            dockerfile: Dockerfile
+        restart: always
+        ports:
+            - "6000:5000"
+        depends_on: 
+            - adminer
+            - personal_database
+        networks:
+            - personal_data
+        volumes:         
+            - .:/code
+        command: >                
+            bash -c "cd pipelines && prefect backend cloud && prefect auth login --key ${PREFECT_API_KEY} && prefect register --project "airbyte" -p prefect_flow.py &&  prefect agent local start"
+
+
+        environment:
+            PYTHONDONTWRITEBYTECODE: 1
+            PYTHONUNBUFFERED: 1
+
+    personal_database:
+        restart: unless-stopped
+        image: postgres:11
+        volumes:
+            - personal_pg_data:/var/lib/postgresql/data
+        environment:
+          POSTGRES_USER: personal_user
+          POSTGRES_PASSWORD: personal
+          POSTGRES_DB: personal
+        networks:
+            - personal_data
+        ports:
+            - "5434:5434"
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - '${ADMINER_PORT}:8081'
+        depends_on:
+            - 'personal_database'
+
+networks:
+    personal_data:
+        driver: bridge
+
+volumes:
+    personal_pg_data:

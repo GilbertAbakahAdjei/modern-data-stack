@@ -1,0 +1,1 @@
+select * from `demo_test.demo_test` where new_recovered > new_confirmed

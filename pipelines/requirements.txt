@@ -1,0 +1,21 @@
+pandas
+prefect[viz,google,aws]
+requests
+flask
+python-dotenv
+flask-cors
+ariadne
+psycopg2
+sqlalchemy
+alembic
+py-postgresql
+python-decouple
+# boto3==1.9.253
+# botocore==1.12.253
+# jmespath==0.9.4
+# python-dateutil==2.8.1
+# six==1.14.0
+# urllib3==1.24.3
+dbt-bigquery
+# dbt-postgres
+# dbt-redshift
